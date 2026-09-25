@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday, Rohini! ✨</title>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Plus+Jakarta+Sans:wght@300;400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-grad-1: #0d0614;
+      --bg-grad-2: #1e0b2b;
+      --accent-pink: #ff758c;
+      --accent-rose: #ff85a2;
+      --accent-gold: #f7d070;
+      --accent-purple: #c084fc;
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.15);
+      --text-main: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--bg-grad-1), var(--bg-grad-2), #150024);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    canvas#canvas-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      animation: fadeIn 1.5s ease-out;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--accent-purple);
+      margin-bottom: 12px;
+    }
+
+    h1.title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(3.5rem, 8vw, 5.5rem);
+      background: linear-gradient(45deg, var(--accent-pink), var(--accent-gold), var(--accent-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 35px rgba(255, 117, 140, 0.3);
+      line-height: 1.1;
+    }
+
+    /* Interactive Gift Box Section */
+    .gift-box-wrapper {
+      text-align: center;
+      margin: 20px 0;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .gift-instruction {
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      animation: pulseText 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.8; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.05); }
+    }
+
+    .gift-box {
+      font-size: 100px;
+      display: inline-block;
+      user-select: none;
+      transition: transform 0.2s ease;
+      filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.5));
+    }
+
+    .gift-box:hover {
+      transform: scale(1.1);
+    }
+
+    .gift-box.shaking {
+      animation: shakeBox 0.5s infinite ease-in-out;
+    }
+
+    @keyframes shakeBox {
+      0% { transform: rotate(0deg) scale(1.1); }
+      20% { transform: rotate(-12deg) scale(1.15); }
+      40% { transform: rotate(12deg) scale(1.15); }
+      60% { transform: rotate(-8deg) scale(1.15); }
+      80% { transform: rotate(8deg) scale(1.15); }
+      100% { transform: rotate(0deg) scale(1.1); }
+    }
+
+    .gift-box.opened {
+      animation: popOpen 0.6s forwards ease-out;
+    }
+
+    @keyframes popOpen {
+      0% { transform: scale(1.1); opacity: 1; }
+      50% { transform: scale(1.6); opacity: 0.8; }
+      100% { transform: scale(0); opacity: 0; display: none; }
+    }
+
+    /* Coupons Section */
+    .coupons-container {
+      display: none;
+      width: 100%;
+      flex-direction: column;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .coupons-container.active {
+      display: flex;
+      animation: fadeInUp 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      color: var(--accent-gold);
+      font-style: italic;
+      text-align: center;
+    }
+
+    .coupons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      width: 100%;
+    }
+
+    /* Special Ultra Card (NO Pass) */
+    .coupon-card.ultra {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, rgba(255, 117, 140, 0.25), rgba(247, 208, 112, 0.25));
+      border: 2px solid var(--accent-gold);
+      box-shadow: 0 0 30px rgba(247, 208, 112, 0.3);
+    }
+
+    .coupon-card.ultra .coupon-title {
+      font-size: 1.6rem;
+      color: var(--accent-gold);
+    }
+
+    /* Standard Coupon Cards */
+    .coupon-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px dashed var(--glass-border);
+      border-radius: 24px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .coupon-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--accent-pink);
+      box-shadow: 0 15px 35px rgba(255, 117, 140, 0.25);
+    }
+
+    .coupon-badge {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-purple);
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    .coupon-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 12px;
+    }
+
+    .coupon-desc {
+      font-size: 0.98rem;
+      color: rgba(255, 255, 255, 0.85);
+      line-height: 1.6;
+      margin-bottom: 24px;
+      font-weight: 300;
+    }
+
+    .btn-claim {
+      background: linear-gradient(45deg, var(--accent-pink), var(--accent-purple));
+      border: none;
+      color: white;
+      padding: 14px 20px;
+      border-radius: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      width: 100%;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-claim:hover {
+      transform: scale(1.02);
+      box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4);
+    }
+
+    .coupon-card.claimed {
+      opacity: 0.5;
+      filter: grayscale(0.7);
+      border-style: solid;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .coupon-card.claimed .btn-claim {
+      background: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.6);
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: rgba(255, 255, 255, 0.4);
+      padding: 30px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 30px 15px; }
+      .coupon-card.ultra { grid-column: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="canvas-bg"></canvas>
+
+  <div class="container">
+    
+    <header>
+      <div class="subtitle">A Special Birthday Surprise For</div>
+      <h1 class="title">Rohini ✨</h1>
+    </header>
+
+    <!-- Gift Box Interactive Trigger -->
+    <div class="gift-box-wrapper" id="giftWrapper" onclick="openGiftBox()">
+      <div class="gift-instruction" id="giftInstruction">🎁 Tap the gift box to unlock your coupons!</div>
+      <div class="gift-box" id="giftBox">🎁</div>
+    </div>
+
+    <!-- Hidden Coupons Revealed Upon Tapping -->
+    <main class="coupons-container" id="couponsContainer">
+      <h2 class="section-title">Your Special Birthday Coupon Collection 🎟️</h2>
+
+      <div class="coupons-grid">
+
+        <!-- Ultra Special NO Coupon -->
+        <div class="coupon-card ultra" id="coupon-no">
+          <div>
+            <div class="coupon-badge">👑 Ultimate Master Card</div>
+            <div class="coupon-title">The Absolute "NO-FREE" Pass</div>
+            <div class="coupon-desc">
+              Good for one entire day where I am completely forbidden from saying "NO" to you for anything you ask, request, or decide! Whatever you say, goes—unconditionally!
+            </div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-no')">Claim Pass 👑</button>
+        </div>
+
+        <!-- Coupon 1 -->
+        <div class="coupon-card" id="coupon-1">
+          <div>
+            <div class="coupon-badge">Distance Comfort</div>
+            <div class="coupon-title">☕ Food & Coffee Delivery</div>
+            <div class="coupon-desc">Redeem for your favorite coffee, boba, or meal delivered straight to your doorstep on me whenever you want.</div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-1')">Redeem Coupon</button>
+        </div>
+
+        <!-- Coupon 2 -->
+        <div class="coupon-card" id="coupon-2">
+          <div>
+            <div class="coupon-badge">Connection</div>
+            <div class="coupon-title">🌙 Late-Night Vent Session</div>
+            <div class="coupon-desc">100% active listening session whenever you need to talk, complain, share gossip, or unpack your day.</div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-2')">Redeem Coupon</button>
+        </div>
+
+        <!-- Coupon 3 -->
+        <div class="coupon-card" id="coupon-3">
+          <div>
+            <div class="coupon-badge">Virtual Date</div>
+            <div class="coupon-title">🍿 Synchronized Movie Night</div>
+            <div class="coupon-desc">We pick a movie or show, stream it simultaneously, and enjoy snacks together over a call.</div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-3')">Redeem Coupon</button>
+        </div>
+
+        <!-- Coupon 4 -->
+        <div class="coupon-card" id="coupon-4">
+          <div>
+            <div class="coupon-badge">Care Package</div>
+            <div class="coupon-title">💌 Handwritten Letter & Surprise</div>
+            <div class="coupon-desc">A physical handwritten letter and a surprise care package shipped straight to your mailbox.</div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-4')">Redeem Coupon</button>
+        </div>
+
+        <!-- Coupon 5 -->
+        <div class="coupon-card" id="coupon-5">
+          <div>
+            <div class="coupon-badge">Future Reunion</div>
+            <div class="coupon-title">📍 Next Meetup Itinerary Control</div>
+            <div class="coupon-desc">Total authority over choosing food spots, cafes, and activities the next time we meet in person.</div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-5')">Redeem Coupon</button>
+        </div>
+
+        <!-- Coupon 6 -->
+        <div class="coupon-card" id="coupon-6">
+          <div>
+            <div class="coupon-badge">Playful Power</div>
+            <div class="coupon-title">🏆 Instant Debate Victory</div>
+            <div class="coupon-desc">Play this card in chat during any friendly disagreement or debate to instantly win without questions.</div>
+          </div>
+          <button class="btn-claim" onclick="claimCoupon('coupon-6')">Redeem Coupon</button>
+        </div>
+
+      </div>
+    </main>
+
+    <footer>
+      Valid for 365 days • Designed with care for Rohini ✨
+    </footer>
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    // Star particles background
+    const canvas = document.getElementById('canvas-bg');
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 2.5 + 1;
+        this.speedX = (Math.random() - 0.5) * 0.4;
+        this.speedY = -Math.random() * 0.6 - 0.2;
+        this.opacity = Math.random() * 0.6 + 0.2;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.y < 0) this.reset();
+      }
+      draw() {
+        ctx.fillStyle = `rgba(255, 182, 193, ${this.opacity})`;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 60; i++) {
+      particles.push(new Particle());
+    }
+
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    animateParticles();
+
+    // Box Shake and Burst Animation
+    let isOpening = false;
+    function openGiftBox() {
+      if (isOpening) return;
+      isOpening = true;
+
+      const giftBox = document.getElementById('giftBox');
+      const giftInstruction = document.getElementById('giftInstruction');
+      const couponsContainer = document.getElementById('couponsContainer');
+
+      // Start shaking
+      giftBox.classList.add('shaking');
+      giftInstruction.textContent = "Unlocking magic...";
+
+      setTimeout(() => {
+        // Pop open
+        giftBox.classList.remove('shaking');
+        giftBox.classList.add('opened');
+
+        // Trigger Confetti Blast
+        if (typeof confetti === 'function') {
+          confetti({
+            particleCount: 150,
+            spread: 100,
+            origin: { y: 0.5 }
+          });
+          setTimeout(() => {
+            confetti({
+              particleCount: 100,
+              angle: 60,
+              spread: 80,
+              origin: { x: 0 }
+            });
+            confetti({
+              particleCount: 100,
+              angle: 120,
+              spread: 80,
+              origin: { x: 1 }
+            });
+          }, 300);
+        }
+
+        // Reveal coupons
+        setTimeout(() => {
+          document.getElementById('giftWrapper').style.display = 'none';
+          couponsContainer.classList.add('active');
+        }, 500);
+
+      }, 1200);
+    }
+
+    // Coupon Redemption Handler
+    document.addEventListener('DOMContentLoaded', () => {
+      const claimed = JSON.parse(localStorage.getItem('claimedCouponsRohini') || '[]');
+      claimed.forEach(id => {
+        const card = document.getElementById(id);
+        if (card) {
+          card.classList.add('claimed');
+          const btn = card.querySelector('.btn-claim');
+          btn.textContent = 'Claimed ✓';
+        }
+      });
+    });
+
+    function claimCoupon(id) {
+      const card = document.getElementById(id);
+      if (card.classList.contains('claimed')) return;
+
+      card.classList.add('claimed');
+      const btn = card.querySelector('.btn-claim');
+      btn.textContent = 'Claimed ✓';
+
+      const claimed = JSON.parse(localStorage.getItem('claimedCouponsRohini') || '[]');
+      if (!claimed.includes(id)) {
+        claimed.push(id);
+        localStorage.setItem('claimedCouponsRohini', JSON.stringify(claimed));
+      }
+
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 70,
+          spread: 60,
+          origin: { y: 0.7 }
+        });
+      }
+    }
+  </script>
+</body>
+</html>
